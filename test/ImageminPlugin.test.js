@@ -686,20 +686,20 @@ describe("imagemin plugin", () => {
             generator: [
               {
                 preset: "webp",
-                implementation: ImageMinimizerPlugin.squooshGenerate,
+                implementation: ImageMinimizerPlugin.sharpGenerate,
                 options: {
                   encodeOptions: {
                     webp: {
-                      lossless: 1,
+                      lossless: true,
                     },
                   },
                 },
               },
             ],
             minimizer: {
-              implementation: ImageMinimizerPlugin.squooshMinify,
+              implementation: ImageMinimizerPlugin.sharpMinify,
               options: {
-                mozjpeg: {
+                jpeg: {
                   quality: 90,
                 },
               },
@@ -911,7 +911,7 @@ describe("imagemin plugin", () => {
     );
   });
 
-  it("should optimizes and generate images (squooshGenerate)", async () => {
+  it("should optimizes and generate images (sharpGenerate)", async () => {
     const stats = await runWebpack({
       entry: path.join(fixturesPath, "generator-and-minimizer.js"),
       imageminPluginOptions: {
@@ -919,24 +919,24 @@ describe("imagemin plugin", () => {
         generator: [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
           },
         ],
         minimizer: {
-          implementation: ImageMinimizerPlugin.squooshMinify,
+          implementation: ImageMinimizerPlugin.sharpMinify,
           options: {
             encodeOptions: {
-              mozjpeg: {
+              jpeg: {
                 quality: 40,
               },
-              oxipng: {
+              png: {
                 quality: 40,
               },
             },
@@ -1004,11 +1004,11 @@ describe("imagemin plugin", () => {
         generator: [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
@@ -1110,7 +1110,7 @@ describe("imagemin plugin", () => {
     expect(/image\/webp/i.test(ext.mime)).toBe(true);
   });
 
-  it("should generate and allow to use any name in the 'preset' option using 'squooshGenerate'", async () => {
+  it("should generate and allow to use any name in the 'preset' option using 'sharpGenerate'", async () => {
     const stats = await runWebpack({
       entry: path.join(fixturesPath, "generator-and-minimizer-3.js"),
       imageminPluginOptions: {
@@ -1118,11 +1118,11 @@ describe("imagemin plugin", () => {
         generator: [
           {
             preset: "webp-other",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
@@ -1144,37 +1144,6 @@ describe("imagemin plugin", () => {
     const ext = await fileType.fromFile(file);
 
     expect(/image\/webp/i.test(ext.mime)).toBe(true);
-  });
-
-  it("should generate throw an error on multiple 'encodeOptions' options using 'squooshGenerate'", async () => {
-    const stats = await runWebpack({
-      entry: path.join(fixturesPath, "generator-and-minimizer-3.js"),
-      imageminPluginOptions: {
-        test: /\.(jpe?g|gif|json|svg|png|webp)$/i,
-        generator: [
-          {
-            preset: "webp-other",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
-            options: {
-              encodeOptions: {
-                webp: {
-                  lossless: 1,
-                },
-                avif: {},
-              },
-            },
-          },
-        ],
-      },
-    });
-    const { compilation } = stats;
-    const { warnings, errors } = compilation;
-
-    expect(warnings).toHaveLength(0);
-    expect(errors).toHaveLength(1);
-    expect(errors[0].message).toMatch(
-      /Multiple values for the 'encodeOptions' option is not supported for 'loader-test.png', specify only one codec for the generator/
-    );
   });
 
   it("should generate throw an error on multiple 'encodeOptions' options using 'sharpGenerate'", async () => {
@@ -1243,11 +1212,11 @@ describe("imagemin plugin", () => {
           generator: [
             {
               preset: "webp",
-              implementation: ImageMinimizerPlugin.squooshGenerate,
+              implementation: ImageMinimizerPlugin.sharpGenerate,
               options: {
                 encodeOptions: {
                   webp: {
-                    lossless: 1,
+                    lossless: true,
                   },
                 },
               },
@@ -1259,11 +1228,11 @@ describe("imagemin plugin", () => {
           generator: [
             {
               preset: "webp",
-              implementation: ImageMinimizerPlugin.squooshGenerate,
+              implementation: ImageMinimizerPlugin.sharpGenerate,
               options: {
                 encodeOptions: {
                   webp: {
-                    quality: 0,
+                    quality: 50,
                   },
                 },
               },
@@ -1291,7 +1260,7 @@ describe("imagemin plugin", () => {
     const webpAsset = compilation.getAsset("loader-test.webp");
 
     expect(webpAsset.info.generated).toBe(true);
-    expect(webpAsset.info.generatedBy).toEqual(["squoosh"]);
+    expect(webpAsset.info.generatedBy).toEqual(["sharp"]);
 
     // TODO fix me
     await expect(isOptimized("loader-test.gif", compilation)).resolves.toBe(
@@ -1487,11 +1456,11 @@ describe("imagemin plugin", () => {
           {
             preset: "webp-other",
             filter: () => false,
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
@@ -1523,11 +1492,11 @@ describe("imagemin plugin", () => {
         generator: [
           {
             preset: "avif",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
@@ -1541,7 +1510,7 @@ describe("imagemin plugin", () => {
     expect(warnings).toHaveLength(0);
     expect(errors).toHaveLength(1);
     expect(errors[0].message).toMatch(
-      /Error with 'loader-test.txt': Binary blob has an unsupported format/g
+      /Error with 'loader-test.txt': Input file has an unsupported format/g
     );
   });
 
@@ -1946,7 +1915,7 @@ describe("imagemin plugin", () => {
           {
             type: "import",
             preset: "avif",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 avif: {
@@ -1957,18 +1926,18 @@ describe("imagemin plugin", () => {
           },
           {
             type: "asset",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
           },
           {
             type: "asset",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 avif: {
@@ -1980,9 +1949,9 @@ describe("imagemin plugin", () => {
         ],
         minimizer: [
           {
-            implementation: ImageMinimizerPlugin.squooshMinify,
+            implementation: ImageMinimizerPlugin.sharpMinify,
             options: {
-              mozjpeg: {
+              jpeg: {
                 quality: 90,
               },
             },
@@ -2240,11 +2209,11 @@ describe("imagemin plugin", () => {
         generator: [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
@@ -2252,13 +2221,13 @@ describe("imagemin plugin", () => {
         ],
         minimizer: [
           {
-            implementation: ImageMinimizerPlugin.squooshMinify,
+            implementation: ImageMinimizerPlugin.sharpMinify,
             options: {
               encodeOptions: {
-                mozjpeg: {
+                jpeg: {
                   quality: 40,
                 },
-                oxipng: {
+                png: {
                   quality: 40,
                 },
               },

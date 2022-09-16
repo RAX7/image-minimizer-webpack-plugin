@@ -16,11 +16,11 @@ describe("loader generator option", () => {
         generator: [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
@@ -52,22 +52,22 @@ describe("loader generator option", () => {
         generator: [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
           },
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
@@ -93,11 +93,11 @@ describe("loader generator option", () => {
         generator: [
           {
             preset: "webpz",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
@@ -124,11 +124,11 @@ describe("loader generator option", () => {
         generator: [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
@@ -163,11 +163,11 @@ describe("loader generator option", () => {
         generator: [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             options: {
               encodeOptions: {
                 webp: {
-                  lossless: 1,
+                  lossless: true,
                 },
               },
             },
@@ -187,54 +187,6 @@ describe("loader generator option", () => {
 
     const transformedExt = await fileType.fromFile(transformedAsset);
 
-    expect(/image\/webp/i.test(transformedExt.mime)).toBe(true);
-    expect(warnings).toHaveLength(0);
-    expect(errors).toHaveLength(0);
-  });
-
-  it("should generate and resize (squooshGenerate)", async () => {
-    const stats = await runWebpack({
-      entry: path.join(fixturesPath, "./loader-single.js"),
-      imageminLoaderOptions: {
-        generator: [
-          {
-            preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
-            options: {
-              resize: {
-                enabled: true,
-                width: 100,
-                height: 50,
-              },
-              rotate: {
-                numRotations: 90,
-              },
-              encodeOptions: {
-                webp: {
-                  lossless: 1,
-                },
-              },
-            },
-          },
-        ],
-      },
-    });
-
-    const { compilation } = stats;
-    const { warnings, errors } = compilation;
-
-    const transformedAsset = path.resolve(
-      __dirname,
-      compilation.options.output.path,
-      "./nested/deep/loader-test.webp"
-    );
-
-    const transformedExt = await fileType.fromFile(transformedAsset);
-    const sizeOf = promisify(imageSize);
-    const dimensions = await sizeOf(transformedAsset);
-
-    expect(dimensions.height).toBe(50);
-    expect(dimensions.width).toBe(100);
     expect(/image\/webp/i.test(transformedExt.mime)).toBe(true);
     expect(warnings).toHaveLength(0);
     expect(errors).toHaveLength(0);
@@ -350,84 +302,6 @@ describe("loader generator option", () => {
       __dirname,
       compilation.options.output.path,
       "./sharp-generate-loader-test-100x50.webp"
-    );
-
-    const transformedExt = await fileType.fromFile(transformedAsset);
-    const sizeOf = promisify(imageSize);
-    const dimensions = await sizeOf(transformedAsset);
-
-    expect(dimensions.height).toBe(50);
-    expect(dimensions.width).toBe(100);
-    expect(/image\/webp/i.test(transformedExt.mime)).toBe(true);
-    expect(warnings).toHaveLength(0);
-    expect(errors).toHaveLength(0);
-  });
-
-  it("should minify and rename (squooshMinify)", async () => {
-    const stats = await runWebpack({
-      entry: path.join(fixturesPath, "./simple.js"),
-      imageminLoaderOptions: {
-        minimizer: {
-          implementation: ImageMinimizerPlugin.squooshMinify,
-          filename: "squoosh-minify-[name]-[width]x[height][ext]",
-          options: {
-            encodeOptions: {
-              jpeg: { quality: 90 },
-            },
-          },
-        },
-      },
-    });
-
-    const { compilation } = stats;
-    const { warnings, errors } = compilation;
-
-    const transformedAsset = path.resolve(
-      __dirname,
-      compilation.options.output.path,
-      "./squoosh-minify-loader-test-1x1.jpg"
-    );
-
-    const transformedExt = await fileType.fromFile(transformedAsset);
-
-    expect(/image\/jpeg/i.test(transformedExt.mime)).toBe(true);
-    expect(warnings).toHaveLength(0);
-    expect(errors).toHaveLength(0);
-  });
-
-  it("should generate, resize and rename (squooshGenerate)", async () => {
-    const stats = await runWebpack({
-      entry: path.join(fixturesPath, "./generator.js"),
-      imageminLoaderOptions: {
-        generator: [
-          {
-            preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
-            filename: "squoosh-generate-[name]-[width]x[height][ext]",
-            options: {
-              resize: {
-                enabled: true,
-                width: 100,
-                height: 50,
-              },
-              encodeOptions: {
-                webp: {
-                  lossless: true,
-                },
-              },
-            },
-          },
-        ],
-      },
-    });
-
-    const { compilation } = stats;
-    const { warnings, errors } = compilation;
-
-    const transformedAsset = path.resolve(
-      __dirname,
-      compilation.options.output.path,
-      "./squoosh-generate-loader-test-100x50.webp"
     );
 
     const transformedExt = await fileType.fromFile(transformedAsset);

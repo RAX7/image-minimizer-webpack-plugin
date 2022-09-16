@@ -9,13 +9,13 @@ describe("validate loader options", () => {
     minimizer: {
       success: [
         {
-          implementation: ImageMinimizerPlugin.squooshMinify,
+          implementation: ImageMinimizerPlugin.sharpMinify,
         },
         {
-          implementation: ImageMinimizerPlugin.squooshMinify,
+          implementation: ImageMinimizerPlugin.sharpMinify,
           options: {
             encodeOptions: {
-              mozjpeg: {
+              jpeg: {
                 quality: 90,
               },
             },
@@ -23,15 +23,15 @@ describe("validate loader options", () => {
         },
         [
           {
-            implementation: ImageMinimizerPlugin.squooshMinify,
+            implementation: ImageMinimizerPlugin.sharpMinify,
           },
         ],
         [
           {
-            implementation: ImageMinimizerPlugin.squooshMinify,
+            implementation: ImageMinimizerPlugin.sharpMinify,
             options: {
               encodeOptions: {
-                mozjpeg: {
+                jpeg: {
                   quality: 90,
                 },
               },
@@ -40,13 +40,13 @@ describe("validate loader options", () => {
         ],
         [
           {
-            implementation: ImageMinimizerPlugin.squooshMinify,
+            implementation: ImageMinimizerPlugin.sharpMinify,
           },
           {
-            implementation: ImageMinimizerPlugin.squooshMinify,
+            implementation: ImageMinimizerPlugin.sharpMinify,
             options: {
               encodeOptions: {
-                mozjpeg: {
+                jpeg: {
                   quality: 90,
                 },
               },
@@ -54,22 +54,22 @@ describe("validate loader options", () => {
           },
         ],
         {
-          implementation: ImageMinimizerPlugin.squooshMinify,
+          implementation: ImageMinimizerPlugin.sharpMinify,
           filter: () => false,
         },
         [
           {
-            implementation: ImageMinimizerPlugin.squooshMinify,
+            implementation: ImageMinimizerPlugin.sharpMinify,
             filter: () => false,
           },
         ],
         {
-          implementation: ImageMinimizerPlugin.squooshMinify,
+          implementation: ImageMinimizerPlugin.sharpMinify,
           filename: "[name].[ext]",
         },
         [
           {
-            implementation: ImageMinimizerPlugin.squooshMinify,
+            implementation: ImageMinimizerPlugin.sharpMinify,
             filename: () => "[name].[ext]",
           },
         ],
@@ -81,11 +81,11 @@ describe("validate loader options", () => {
         null,
         [],
         {
-          implementation: ImageMinimizerPlugin.squooshMinify,
+          implementation: ImageMinimizerPlugin.sharpMinify,
           filter: true,
         },
         {
-          implementation: ImageMinimizerPlugin.squooshMinify,
+          implementation: ImageMinimizerPlugin.sharpMinify,
           filename: true,
         },
       ],
@@ -95,37 +95,37 @@ describe("validate loader options", () => {
         [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
           },
         ],
         [
           {
             preset: "one",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
           },
           {
             preset: "two",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
           },
         ],
         [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             filter: () => false,
           },
         ],
         [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             filename: "[name][ext]",
           },
         ],
         [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             filename: () => "[name][ext]",
           },
         ],
@@ -144,14 +144,14 @@ describe("validate loader options", () => {
         [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             filter: true,
           },
         ],
         [
           {
             preset: "webp",
-            implementation: ImageMinimizerPlugin.squooshGenerate,
+            implementation: ImageMinimizerPlugin.sharpGenerate,
             filename: true,
           },
         ],

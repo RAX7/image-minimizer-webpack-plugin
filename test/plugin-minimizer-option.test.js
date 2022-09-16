@@ -38,24 +38,6 @@ describe("plugin minify option", () => {
     expect(errors).toHaveLength(0);
   });
 
-  it('should work with "squooshMinify" minifier', async () => {
-    const stats = await runWebpack({
-      entry: path.join(fixturesPath, "./empty-entry.js"),
-      emitPlugin: true,
-      imageminPluginOptions: {
-        minimizer: {
-          implementation: ImageMinimizerPlugin.squooshMinify,
-        },
-      },
-    });
-    const { compilation } = stats;
-    const { warnings, errors } = compilation;
-
-    expect(compilation.getAsset("plugin-test.jpg").info.size).toBeLessThan(353);
-    expect(warnings).toHaveLength(0);
-    expect(errors).toHaveLength(0);
-  });
-
   it('should work with "sharpMinify" minifier', async () => {
     const stats = await runWebpack({
       entry: path.join(fixturesPath, "./empty-entry.js"),
@@ -217,23 +199,23 @@ describe("plugin minify option", () => {
     expect(errors).toHaveLength(0);
   });
 
-  it("should work with 'squooshMinify' minifier and 'minimizerOptions'", async () => {
+  it("should work with 'sharpMinify' minifier and 'minimizerOptions'", async () => {
     const stats = await runWebpack({
       entry: path.join(fixturesPath, "./empty-entry.js"),
       emitPlugin: true,
       imageminPluginOptions: {
         minimizer: {
-          implementation: ImageMinimizerPlugin.squooshMinify,
+          implementation: ImageMinimizerPlugin.sharpMinify,
           options: {
             encodeOptions: {
-              mozjpeg: {
+              jpeg: {
                 quality: 75,
               },
               webp: {
-                lossless: 1,
+                lossless: true,
               },
               avif: {
-                cqLevel: 0,
+                quality: 75,
               },
             },
           },
